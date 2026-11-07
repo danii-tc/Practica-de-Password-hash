@@ -1,3 +1,4 @@
+
 <?php
     session_start(); 
 ?>
@@ -17,11 +18,11 @@
     <form method="POST" action="" class="login">
         <label for="user">Nombre de usuario:</label>
         <br>
-        <input type="string" step="any" name="user" id="user" required>
+        <input type="text" name="user" id="user" required>
         <br><br>
         <label for="pass">Contraseña:</label>
         <br>
-        <input type="string" step="any" name="pass" id="pass" required>
+        <input type="password" name="pass" id="pass" required>
         <br><br>
         <button type="submit" name="login">Login</button>
         <br><br>
@@ -34,10 +35,12 @@
         $user = 0;
         if (isset($_SESSION['user_reg'])) {
             foreach ($_SESSION['user_reg'] as $us) {
-                if ($us['user'] === $u && $us['pass'] === $p) {
-                    $user = 1;
-                    $_SESSION['user_act'] = $us['name'];
-                    break;
+                if ($us['user'] === $u) {
+                    if (password_verify($p, $us['pass'])) {
+                        $user = 1;
+                        $_SESSION['user_act'] = $us['name'];
+                        break;
+                    }
                 }
             }
         }
@@ -45,7 +48,7 @@
             header("Location: principal.php");
             exit(); 
         } else {
-            $error = "Usuario o contraseña incorrectos";
+            echo "<p>Usuario o contraseña incorrectos</p>";
         }
     }
     ?>
